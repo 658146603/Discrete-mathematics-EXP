@@ -5,7 +5,7 @@ import java.util.*;
  * 开发环境：
  * Windows 10 家庭版 x64, Intel i7 8750H, 8GB RAM, 128 GB SSD
  * IDE : intellij IDEA
- * JDK 11.0.1
+ * JDK : OpenJDK 11.0.1
  *
  * 运行环境：
  * 推荐使用 JDK 11.0.1 环境下编译运行
@@ -81,9 +81,20 @@ public class Main {
          * 无最小元
          * 无最大元
          */
+
+        /**
+         * scanner用于从控制台读取输入的一个数字，字符，字符串或一行文字
+         */
         Scanner scanner=new Scanner(System.in);
         System.out.println("Input Size Of Matrix : ");
+        /**
+         * n从键盘中输入，用于确定关系矩阵的大小
+         */
         int n=scanner.nextInt();
+        /**
+         * 定义一个二维数组，用于保存关系矩阵，0为关系不存在，非零为关系存在
+         * 下面的循环用于输入矩阵
+         */
         int[][] M=new int[n][n];
         System.out.println("Input the Matrix : ");
         for(int i=0;i<n;i++){
@@ -91,6 +102,9 @@ public class Main {
                 M[i][j]=scanner.nextInt()==0?0:1;
             }
         }
+        /**
+         * 输出矩阵M的值
+         */
         System.out.println("M : ");
         for(int i=0;i<n;i++){
             System.out.println(Arrays.toString(M[i]));
@@ -105,7 +119,10 @@ public class Main {
         }
         System.out.println("}");
 
-        // 验证自反性
+        /**
+         * 验证自反性
+         * 检查对角线是否都存在，如果不存在则将属性@isReverse设置为false
+         */ 
         boolean isReverse=true;
         for (int i = 0; i < n; i++) {
             if(M[i][i]==0){
@@ -120,6 +137,9 @@ public class Main {
         //     System.out.println("集合M没有自反性");
         // }
 
+        /**
+         * 验证对称性，如果@M[i][j]!=0且@M[j][i]==0则判断没有对称性
+         */
         boolean isSymmetrical=true;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -135,10 +155,13 @@ public class Main {
         //     System.out.println("集合M没有对称性");
         // }
 
+        /**
+         * 验证反对称性，如果i!=j且@M[i][j]!=0且@M[j][i]！=0则判断没有反对称性
+         */
         boolean isUnSymmetrical=true;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if(i!=j&M[i][j]!=0&&M[j][i]!=0){
+                if(i!=j&&M[i][j]!=0&&M[j][i]!=0){
                     isUnSymmetrical=false;
                     break;
                 }
@@ -151,7 +174,9 @@ public class Main {
         //     System.out.println("集合M没有反对称性");
         // }
 
-
+        /**
+         * 验证传递性，对矩阵进行二次矩阵乘法并相加，最后与原矩阵进行比较，如果M不是M*M的子集，则矩阵没有传递性
+         */
         boolean isTransitivity=true;
         int[][] tempM=new int[n][n];
         for (int i = 0; i < n; i++) {
@@ -177,12 +202,18 @@ public class Main {
         //     System.out.println("集合M没有传递性");
         // }
 
+        /**
+         * 偏序关系满足自反性，反对称性，传递性
+         */
         if (isReverse&&isUnSymmetrical&&isTransitivity){
             System.out.println("集合M是偏序关系");
             int[] in = new int[n];
             int[] out = new int[n];
             /*
-              计算极大元
+             * 计算极大元，极小元
+             * 通过计算每个元素的入度和出度来判断极大元和极小元，入度为1则为极小元，出度为1则为极大元
+             * 如果有多个入度为1的元素，则极小元有多个，故没有最小元，否则唯一的极小元为最小元
+             * 如果有多个出度为1的元素，则极大元有多个，故没有极大元，否则唯一的极大元为最大元
              */
             for(int i=0;i<n;i++){
                 for (int j = 0; j < n; j++) {
